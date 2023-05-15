@@ -30,10 +30,16 @@ public class BitArray {
     
     private var data : [UInt8]
 
-    public init(nBits : Int=0) {
+    public init(nBits : Int) {
         self.nBits = nBits
         self.nBytes = (nBits+7)>>3
         self.data = Array<UInt8>(repeating: 0, count: self.nBytes)
+    }
+    
+    public init() {
+        self.nBits=0
+        self.nBytes=0
+        self.data = []
     }
     
     public init(nBytes : Int) {
@@ -58,6 +64,10 @@ public class BitArray {
     }
     public convenience init(bytes : [UInt8]) {
         self.init(bytes: bytes, nBits: 8*bytes.count)
+    }
+    
+    public convenience init(_ other : BitArray) {
+        self.init(bytes: other.bytes, nBits: other.nBits)
     }
     
     public subscript(_ index : Index) -> Bool {
