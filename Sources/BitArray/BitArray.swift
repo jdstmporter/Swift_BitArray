@@ -30,7 +30,7 @@ public class BitArray {
     
     private var data : [UInt8]
 
-    public init(nBits : Int) {
+    public init(nBits : Int=0) {
         self.nBits = nBits
         self.nBytes = (nBits+7)>>3
         self.data = Array<UInt8>(repeating: 0, count: self.nBytes)
