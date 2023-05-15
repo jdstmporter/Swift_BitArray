@@ -10,7 +10,7 @@ fileprivate extension BinaryInteger {
     }
 }
 
-public class BitArray {
+public class BitArray : Codable {
     public struct Index {
         let byte : Int
         let bit : Int
@@ -82,6 +82,27 @@ public class BitArray {
     
     public var bits : [Bool] { (0..<self.nBits).map { self[$0] } }
     public var bytes : [UInt8] { self.data }
+    
+    
+    // Handle codability
+    
+    enum CodingKeys : String, CodingKey {
+        case nBits
+        case data
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.nBits = try c.decode(Int.self,forKey: .nBits)
+        self.nBytes=(self.nBits+7)>>3
+        self.data = try c.decode([UInt8].self,forKey: .data)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var c=encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(self.nBits,forKey : .nBits)
+        try c.encode(self.data,forKey : .data)
+    }
 }
 
 public extension BitArray {
@@ -99,6 +120,8 @@ public extension BitArray {
     
     var binary : Data { Data(data) }
 }
+
+
 
 
 
